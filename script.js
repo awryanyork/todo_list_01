@@ -1,18 +1,19 @@
-const todoListWrap = document.querySelector('.todoListWrap');
+const form = document.querySelector('form');
+const todoInput = document.querySelector('.todoInput');
+const todosUl = document.querySelector('ul');
 
 const todoList = {
   todos: [],
   addTodo: function (todoText) {
-    this.todos.push({
+    todoList.todos.push({
       todoText,
       completed: false,
     });
-  },
+  }
 };
 
 const view = {
   displayTodos: () => {
-    const todosUl = document.querySelector('ul');
     todosUl.innerHTML = '';
 
     todoList.todos.forEach((todo, position) => {
@@ -22,5 +23,21 @@ const view = {
       todoLi.id = position;
       todosUl.appendChild(todoLi);
     });
-  },
+  }
 };
+
+// add todo to the todos array and display it's contents on the page
+form.addEventListener('submit', function (e) {
+  e.preventDefault();
+  todoList.addTodo(todoInput.value);
+  view.displayTodos();
+  form.reset();
+});
+
+// delete todo
+todosUl.addEventListener('click', function (e) {
+  e.target.remove();
+});
+
+// toggle item complete
+// toggle all complete
