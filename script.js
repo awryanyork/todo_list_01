@@ -10,6 +10,7 @@ const todoList = {
       completed: false,
     });
   }
+  
 };
 
 const view = {
@@ -17,11 +18,30 @@ const view = {
     todosUl.innerHTML = '';
 
     todoList.todos.forEach((todo, position) => {
+      // todoWrap
+      const todoWrap = document.createElement('div');
+      todoWrap.classList.add('todoWrap');
+      todoWrap.id = position;
+      // checkbox
+      const todoCheckbox = document.createElement('input');
+      todoCheckbox.type = "checkbox";
+      // list item itself
       const todoLi = document.createElement('li');
       todoLi.innerHTML = todo.todoText;
       todoLi.classList.add('todoItem');
-      todoLi.id = position;
-      todosUl.appendChild(todoLi);
+      // delete button
+      const todoDeleteButton = document.createElement('button');
+      todoDeleteButton.classList.add('todoDeleteButton');
+      todoDeleteButton.id = position;
+
+      // put everything in the todoWrap div
+      todoWrap.appendChild(todoCheckbox);
+      todoWrap.appendChild(todoLi);
+      todoWrap.appendChild(todoDeleteButton);
+
+      // add todo to the unordered list
+      todosUl.appendChild(todoWrap);
+      
     });
   }
 };
@@ -36,8 +56,21 @@ form.addEventListener('submit', function (e) {
 
 // delete todo
 todosUl.addEventListener('click', function (e) {
-  e.target.remove();
+  console.log(e.target.id);
+  // if the thing clicked has a class of 'todoDeleteButton'
+  if (e.target.classList.contains('todoDeleteButton')) {
+    // then loop over all of todoUl's children
+    if (todosUl.childNodes.forEach(child => {
+      // and check if any of their ids match the id of the target
+      if (child.id === e.target.id) {
+        child.remove();
+      }
+      return;
+    }))
+    return;
+  }
 });
 
 // toggle item complete
+
 // toggle all complete

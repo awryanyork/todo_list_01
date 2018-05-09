@@ -1,3 +1,18 @@
+* {box-sizing: border-box;}
+
 .todoItem {
   list-style: none;
 }
+
+input[type="checkbox"],
+li,
+.todoDeleteButton {
+  display: inline;
+}
+
+button {
+  background: url(images/close_icon.svg);
+  width: 2rem;
+  height: 2rem;
+}
+
