@@ -47,44 +47,25 @@ const handlers = {
 } // end of 'handlers' object
 
 const view = {
-  displayTodos: function () {
+  displayTodos: function (e) {
+    e.preventDefault();
     handlers.addTodo(todoInput.value);
     handlers.displayTodos();
     form.reset();
   },
-
-
-  //  WHY IS UNDEFINED 'E' UNDEFINED IN THIS METHOD WHEN USED AS A CALLBACK, EVEN IF I ADD 'E' AS A PARAMETER TO THE METHOD'S FUNCTION
-  // deleteTodo: function () {
-  //   const isDeleteButton = e.target.classList.contains('todoDeleteButton');
-  //   const todoHasMatchingId = todosUl.childNodes.forEach(child => {
-  //    return (child.id === e.target.id);
-  //   });
-
-  //   if (isDeleteButton && todoHasMatchingId) { child.remove(); }
-  // }// end of 'deleteTodo' method
-
-
+  deleteTodo: function (e) {
+    const isDeleteButton = e.target.classList.contains('todoDeleteButton');
+    const itemToDelete = e.target.parentNode;
+  
+    if (isDeleteButton && itemToDelete) { itemToDelete.remove(); }
+  }
 } // end of 'view' object
 
 // add todo to the todos array and display it's contents on the page
-form.addEventListener('submit', function (e) {
-  e.preventDefault();
-  view.displayTodos();
-});
+form.addEventListener('submit', view.displayTodos);
 
 // delete todo
-todosUl.addEventListener('click', function (e) {
-  const itemToDelete = e.target.parentNode;
-  const isDeleteButton = e.target.classList.contains('todoDeleteButton');
-  const todoHasMatchingId = function () {
-    if (todosUl.childNodes.forEach(child => {
-      return (child.id === e.target.id);
-    })) { return true; };
-  }
-
-  if (isDeleteButton && todoHasMatchingId) { itemToDelete.remove(); }
-});
+todosUl.addEventListener('click', view.deleteTodo);
 
 // toggle item complete
 
