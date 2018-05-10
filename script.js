@@ -1,23 +1,23 @@
 const form = document.querySelector('form');
 const todoInput = document.querySelector('.todoInput');
 const todosUl = document.querySelector('ul');
+const todos = [];
 
-const todoList = {
-  todos: [],
+
+const handlers = {
+  focusOnInput: function () {
+    todoInput.focus();
+  },
   addTodo: function (todoText) {
-    todoList.todos.push({
+    todos.push({
       todoText,
       completed: false,
     });
-  }
-  
-};
-
-const view = {
+  },
   displayTodos: () => {
     todosUl.innerHTML = '';
 
-    todoList.todos.forEach((todo, position) => {
+      todos.forEach((todo, position) => {
       // todoWrap
       const todoWrap = document.createElement('div');
       todoWrap.classList.add('todoWrap');
@@ -43,32 +43,47 @@ const view = {
       todosUl.appendChild(todoWrap);
       
     });
-  }
-};
+  }, // end of 'displayTodos' method
+} // end of 'handlers' object
+
+const view = {
+  displayTodos: function () {
+    handlers.addTodo(todoInput.value);
+    handlers.displayTodos();
+    form.reset();
+  },
+
+
+  //  WHY IS UNDEFINED 'E' UNDEFINED IN THIS METHOD WHEN USED AS A CALLBACK, EVEN IF I ADD 'E' AS A PARAMETER TO THE METHOD'S FUNCTION
+  // deleteTodo: function () {
+  //   const isDeleteButton = e.target.classList.contains('todoDeleteButton');
+  //   const todoHasMatchingId = todosUl.childNodes.forEach(child => {
+  //    return (child.id === e.target.id);
+  //   });
+
+  //   if (isDeleteButton && todoHasMatchingId) { child.remove(); }
+  // }// end of 'deleteTodo' method
+
+
+} // end of 'view' object
 
 // add todo to the todos array and display it's contents on the page
 form.addEventListener('submit', function (e) {
   e.preventDefault();
-  todoList.addTodo(todoInput.value);
   view.displayTodos();
-  form.reset();
 });
 
 // delete todo
 todosUl.addEventListener('click', function (e) {
-  console.log(e.target.id);
-  // if the thing clicked has a class of 'todoDeleteButton'
-  if (e.target.classList.contains('todoDeleteButton')) {
-    // then loop over all of todoUl's children
+  const itemToDelete = e.target.parentNode;
+  const isDeleteButton = e.target.classList.contains('todoDeleteButton');
+  const todoHasMatchingId = function () {
     if (todosUl.childNodes.forEach(child => {
-      // and check if any of their ids match the id of the target
-      if (child.id === e.target.id) {
-        child.remove();
-      }
-      return;
-    }))
-    return;
+      return (child.id === e.target.id);
+    })) { return true; };
   }
+
+  if (isDeleteButton && todoHasMatchingId) { itemToDelete.remove(); }
 });
 
 // toggle item complete
