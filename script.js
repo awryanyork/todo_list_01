@@ -1,5 +1,6 @@
-const form = document.querySelector('form');
+const toggleAllButton = document.querySelector('.toggleAllButton');
 const todoInput = document.querySelector('.todoInput');
+const form = document.querySelector('form');
 const todosUl = document.querySelector('ul');
 const todos = [];
 
@@ -14,7 +15,7 @@ const handlers = {
       completed: false,
     });
   },
-  displayTodos: () => {
+  displayTodos: (e) => {
     todosUl.innerHTML = '';
 
       todos.forEach((todo, position) => {
@@ -25,10 +26,12 @@ const handlers = {
       // checkbox
       const todoCheckbox = document.createElement('input');
       todoCheckbox.type = "checkbox";
+      todoCheckbox.id = position;
       // list item itself
-      const todoLi = document.createElement('li');
-      todoLi.innerHTML = todo.todoText;
-      todoLi.classList.add('todoItem');
+      const todoItem = document.createElement('input');
+      todoItem.type = "text";
+      todoItem.value = todo.todoText;
+      todoItem.classList.add('todoItem');
       // delete button
       const todoDeleteButton = document.createElement('button');
       todoDeleteButton.classList.add('todoDeleteButton');
@@ -36,12 +39,11 @@ const handlers = {
 
       // put everything in the todoWrap div
       todoWrap.appendChild(todoCheckbox);
-      todoWrap.appendChild(todoLi);
+      todoWrap.appendChild(todoItem);
       todoWrap.appendChild(todoDeleteButton);
 
       // add todo to the unordered list
       todosUl.appendChild(todoWrap);
-      
     });
   }, // end of 'displayTodos' method
 } // end of 'handlers' object
@@ -58,7 +60,22 @@ const view = {
     const itemToDelete = e.target.parentNode;
   
     if (isDeleteButton && itemToDelete) { itemToDelete.remove(); }
-  }
+  },
+  toggleAll: function () {
+    // check if every todo's completed value is false
+    const allTodosAreIncomplete = todos.every(todo => todo.completed === false );
+    if (allTodosAreIncomplete) {
+      //then mark all todo's as completed
+      todos.forEach(todo => {
+        todo.completed = true;
+      });
+    } else {
+      // otherwise mark them all as incomplete
+      todos.forEach(todo => {
+        todo.completed = false;
+      });
+    }
+  } // end of 'toggleAll' method
 } // end of 'view' object
 
 // add todo to the todos array and display it's contents on the page
@@ -67,6 +84,6 @@ form.addEventListener('submit', view.displayTodos);
 // delete todo
 todosUl.addEventListener('click', view.deleteTodo);
 
-// toggle item complete
-
 // toggle all complete
+toggleAllButton.addEventListener('click', view.toggleAll);
+

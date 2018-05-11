@@ -4,13 +4,18 @@
   list-style: none;
 }
 
+.toggleAllButton,
 input[type="checkbox"],
-li,
+input[type="text"],
 .todoDeleteButton {
   display: inline;
 }
 
-button {
+.completed {
+  text-decoration-line: line-through;
+}
+
+.todoDeleteButton {
   background: url(images/close_icon.svg);
   width: 2rem;
   height: 2rem;
