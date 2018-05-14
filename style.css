@@ -7,8 +7,17 @@
 .toggleAllButton,
 input[type="checkbox"],
 input[type="text"],
-.todoDeleteButton {
+.todoDeleteButton,
+.hideCompletedButton {
   display: inline;
+}
+
+.hiding {
+  background: red;
+}
+
+.hide {
+  display: none;
 }
 
 .true {
