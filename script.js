@@ -1,8 +1,17 @@
 const toggleAllButton = document.querySelector('.toggleAllButton');
-const hideCompletedButton = document.querySelector('.hideCompletedButton');
+const displayActiveButton = document.querySelector('.displayActiveButton');
+const displayCompletedButton = document.querySelector('.displayCompletedButton');
 const todoInput = document.querySelector('.todoInput');
 const form = document.querySelector('form');
 const todosUl = document.querySelector('ul');
+const warningWrap = document.querySelector('.warningWrap');
+const warningEl = document.createElement('p');
+warningEl.classList.add('warningEl');
+const createWarning = function (warningType) {
+  warningWrap.innerHTML = '';
+  warningEl.innerHTML = `you do not have any ${warningType} todos`;
+  warningWrap.appendChild(warningEl);
+}
 const todos = [];
 
 
@@ -46,13 +55,13 @@ const handlers = {
       todoWrap.appendChild(todoDeleteButton);
 
       const todoIsCompleted = todoWrap.classList.contains('true');
-      const completedAreHidden = hideCompletedButton.classList.contains('hiding');
+      const completedAreHidden = displayActiveButton.classList.contains('hiding');
 
       if (todoIsCompleted && completedAreHidden) {
         todoWrap.classList.add('hide');
+      } else {
+        todoWrap.classList.remove('hide');
       }
-
-
       // add todo to the unordered list
       todosUl.appendChild(todoWrap);
     });
@@ -74,19 +83,35 @@ const view = {
   },
   toggleAll: function () {
     // check if every todo's completed value is false
-    const allTodosAreIncomplete = todos.every(todo => todo.completed === false );
+    let allTodosAreIncomplete = todos.every(todo => todo.completed === false );
     if (allTodosAreIncomplete) {
       // then mark all todo's as completed
       todos.forEach(todo => {
         todo.completed = true;
       });
+      warningWrap.innerHTML = '';
+      if (displayActiveButton.classList.contains('hiding')) {
+        view.displayActiveOnly();
+      }
     } else {
       // otherwise mark them all as incomplete
       todos.forEach(todo => {
         todo.completed = false;
+        warningWrap.innerHTML = '';
+        if (displayCompletedButton.classList.contains('hiding')) {
+          view.displayCompletedOnly();
+        }
       });
-      // take away styling indicating at least one completed todo is being hidden
-      hideCompletedButton.classList.remove('hiding');
+    }
+
+    if (allTodosAreIncomplete) {
+      if (displayActiveButton.classList.contains('hiding')) {
+        warningWrap.remove();
+        view.displayActiveOnly();
+      } else if (displayCompletedButton.classList.contains('hiding')) {
+        warningWrap.remove();
+        view.displayCompletedOnly();
+      }
     }
 
     handlers.displayTodos();
@@ -118,23 +143,55 @@ const view = {
       }
     });
   }, // end of 'handleCheckboxCheckedStatus' method
-  toggleHideCompleted: function () {
+  displayActiveOnly: function () {
+    displayCompletedButton.classList.remove('hiding');
+    displayActiveButton.classList.add('hiding');
+    // add class of 'hide' to .todoWrap divs if their completed state is true
     todosUl.childNodes.forEach(todo => {
-      const todoIsCompleted = todo.classList.contains('true');
-      if (todoIsCompleted) {
-        todo.classList.toggle('hide');
+      const todoIsComplete = todo.classList.contains('true');
+      if (todoIsComplete) {
+        todo.classList.add('hide');
+      } else {
+        todo.classList.remove('hide');
       }
     });
-    const todoDivsArray = Array.from(todosUl.childNodes);
-    const atLeastOneTodoHidden = todoDivsArray.some(todo => {
+    /* checks if at least on todo is hidden 
+    and applies styling to the 'active' button to 
+    signify that only the active todos are being shown */
+    let todoDivsArray = Array.from(todosUl.childNodes);
+    let allTodosHidden = todoDivsArray.every(todo => {
       return todo.classList.contains('hide');
     });
-    if (atLeastOneTodoHidden) {
-      hideCompletedButton.classList.add('hiding');
+    if (allTodosHidden) {
+      createWarning('active');
     } else {
-      hideCompletedButton.classList.remove('hiding');
+      warningWrap.remove();
     }
-  } // end of 'toggleHideCompleted' method
+  }, // end of 'toggleHideCompleted' method
+  displayCompletedOnly: function () {
+    displayActiveButton.classList.remove('hiding');
+    displayCompletedButton.classList.add('hiding');
+    todosUl.childNodes.forEach(todo => {
+      const todoIsIncomplete = todo.classList.contains('false');
+      if (todoIsIncomplete) {
+        todo.classList.add('hide');
+      } else {
+        todo.classList.remove('hide');
+      }
+    });
+    let todoDivsArray = Array.from(todosUl.childNodes);
+    let allTodosHidden = todoDivsArray.every(todo => {
+      return todo.classList.contains('hide');
+    });
+    if (allTodosHidden) {
+      createWarning('completed');
+    } else {
+      const warningEl = document.querySelector('.warningEl');
+      warningEl.remove();
+    }
+      
+
+  } // end of 'displayCompletedOnly' method
 }; // end of 'view' object
 
 // displays all the todos in the 'todos' array on the page
@@ -151,6 +208,7 @@ toggleAllButton.addEventListener('click', view.toggleAll);
 todosUl.addEventListener('click', view.handleChecboxClick);
 
 /* hides all completed todos and updates the styling of the
- 'hideCompletedButton' to reflect that todos are being hidding */
-hideCompletedButton.addEventListener('click', view.toggleHideCompleted);
+ 'displayActiveButton' to reflect that todos are being hidding */
+displayActiveButton.addEventListener('click', view.displayActiveOnly);
 
+displayCompletedButton.addEventListener('click', view.displayCompletedOnly);
