@@ -1,6 +1,8 @@
 const toggleAllButton = document.querySelector('.toggleAllButton');
+const displayAllButton = document.querySelector('.displayAllButton');
 const displayActiveButton = document.querySelector('.displayActiveButton');
 const displayCompletedButton = document.querySelector('.displayCompletedButton');
+const deleteCompletedButton = document.querySelector('.deleteCompletedButton');
 const todoInput = document.querySelector('.todoInput');
 const form = document.querySelector('form');
 const todosUl = document.querySelector('ul');
@@ -124,9 +126,19 @@ const view = {
       }
     });
   }, // end of 'handleCheckboxCheckedStatus' method
+  displayAll: function () {
+    // removes styling from other view option buttons and adds it to the 'displayAllButton'
+    displayCompletedButton.classList.remove('hiding');
+    displayActiveButton.classList.remove('hiding');
+    displayAllButton.classList.add('hiding');
+    todosUl.childNodes.forEach(todo => {
+      todo.classList.remove('hide');
+    });    
+  }, // end of 'displayAll' method
   displayActiveOnly: function () {
     // removes styling from other view option buttons and adds it to the 'displayActiveButton'
     displayCompletedButton.classList.remove('hiding');
+    displayAllButton.classList.remove('hiding');
     displayActiveButton.classList.add('hiding');
     // adds class of 'hide' to the .todoWrap divs if their completed state is true
     todosUl.childNodes.forEach(todo => {
@@ -141,6 +153,7 @@ const view = {
   displayCompletedOnly: function () {
     // removes styling from other view option buttons and adds it to the 'displayActiveButton'
     displayActiveButton.classList.remove('hiding');
+    displayAllButton.classList.remove('hiding');
     displayCompletedButton.classList.add('hiding');
     // adds class of 'hide' to the .todoWrap divs if their completed state is true
     todosUl.childNodes.forEach(todo => {
@@ -151,7 +164,14 @@ const view = {
         todo.classList.remove('hide');
       }
     });
-  } // end of 'displayCompletedOnly' method
+  }, // end of 'displayCompletedOnly' method
+  deleteCompleted: function () {
+    todosUl.childNodes.forEach(todo => {
+      if (todo.classList.contains('true')) {
+        todo.remove();
+      }
+    });
+  } // end of 'displayAll' method
 }; // end of 'view' object
 
 // displays all the todos in the 'todos' array on the page
@@ -167,6 +187,9 @@ toggleAllButton.addEventListener('click', view.toggleAll);
 // handles the case of someone marking a todo complete/incomplete via the checkbox
 todosUl.addEventListener('click', view.handleChecboxClick);
 
+// displays all todos when clicked
+displayAllButton.addEventListener('click', view.displayAll);
+
 /* hides all completed todos and updates the styling of the
  'displayActiveButton' to reflect that completed todos are being hidden */
 displayActiveButton.addEventListener('click', view.displayActiveOnly);
@@ -174,3 +197,6 @@ displayActiveButton.addEventListener('click', view.displayActiveOnly);
 /* hides all completed todos and updates the styling of the
  'displayActiveButton' to reflect that incomplete todos are being hidden */
 displayCompletedButton.addEventListener('click', view.displayCompletedOnly);
+
+// permanently removes any todos that are completed
+deleteCompletedButton.addEventListener('click', view.deleteCompleted);

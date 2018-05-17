@@ -8,16 +8,23 @@
   <title>Todo List</title>
 </head>
 <body onload="handlers.focusOnInput()">
-    <h2>Todo List</h2>
-
-    <button class="toggleAllButton">Toggle All</button>
-    <button class="displayActiveButton">View Active</button>
-    <button class="displayCompletedButton">View Completed</button>
-    <form action="">
-      <input type="text" class="todoInput">
-    </form>
-    <ul id="todoListUl">
-    </ul>
+    <div class="siteWrap">
+      <h2>Todo List</h2>
+    
+      <div class="inputSectionWrap">
+        <button class="toggleAllButton">Toggle All</button>
+        <form action="">
+          <input type="text" class="todoInput">
+        </form>
+      </div>
+      <ul id="todoListUl"></ul>
+      <div class="displayButtonsWrap">
+        <button class="displayAllButton">All</button>
+        <button class="displayActiveButton">Active</button>
+        <button class="displayCompletedButton">Completed</button>
+        <button class="deleteCompletedButton">Delete Completed</button>
+    </div>
+    </div>
   <script  type="text/javascript" src="script.js"></script>
 </body>
 </html>
