@@ -25,8 +25,8 @@ const handlers = {
     todos.forEach((todo, position) => {
     // todoWrap
       const todoWrap = document.createElement('div');
-      let CompletionState = String(todo.completed);
-      todoWrap.classList.add(CompletionState);
+      const completionState = String(todo.completed);
+      todoWrap.classList.add(completionState);
       todoWrap.classList.add('todoWrap');
       todoWrap.id = position;
       // checkbox
@@ -34,9 +34,10 @@ const handlers = {
       todoCheckbox.type = 'checkbox';
       todoCheckbox.id = position;
       // list item itself
-      const todoItem = document.createElement('input');
-      todoItem.type = 'text';
-      todoItem.value = todo.todoText;
+      const todoItem = document.createElement('label');
+      todoItem.innerHTML = todo.todoText;
+      todoItem.setAttribute('contenteditable', true);
+      todoItem.classList.add('editable');
       todoItem.classList.add('todoItem');
       // delete button
       const todoDeleteButton = document.createElement('button');
@@ -51,6 +52,23 @@ const handlers = {
       todosUl.appendChild(todoWrap);
     });
   }, // end of 'displayTodos' method
+  handleTodoEdits: function (e) {
+    // check if the item is editable
+    if (e.target.classList.contains('editable')) {
+      const currentEl = e.target;
+      // listen for the enter key to pressed down
+      currentEl.addEventListener('keydown', function (e) {
+        if (e.keyCode === 13) {
+          e.preventDefault();
+          // set the value of the element to be its current value
+          const text = currentEl.innerHTML;
+          currentEl.innerHTML = text;
+          // return focus to the todo input up top
+          handlers.focusOnInput();
+        }
+      });
+    }
+  }, // end of 'handleTodoEdits' method
 }; // end of 'handlers' object
 
 const view = {
@@ -171,7 +189,23 @@ const view = {
         todo.remove();
       }
     });
-  } // end of 'displayAll' method
+  }, // end of 'deleteCompleted' method
+  handleToggleAllStateIssue: function () {
+    const todosArray = Array.from(todosUl.childNodes);
+    // cut off last todo because it will always be incomplete
+    const currentTodos = todosArray.splice(0, todosArray.length -1);
+    // check if all todos before you submitted new one are complete
+    const allTodosComplete = currentTodos.every(todo => {
+      todo.classList.contains('true');
+    });
+    console.log(allTodosComplete);
+    if (allTodosComplete) {
+      toggleAllButton.checked = false;
+      todosUl.childNodes.forEach(todo => {
+        todo.firstChild.checked = true;
+      });
+    }
+  }
 }; // end of 'view' object
 
 // displays all the todos in the 'todos' array on the page
@@ -200,3 +234,11 @@ displayCompletedButton.addEventListener('click', view.displayCompletedOnly);
 
 // permanently removes any todos that are completed
 deleteCompletedButton.addEventListener('click', view.deleteCompleted);
+
+/* checks if you clicked on an editable div and puts focus back 
+on the todoInput when the enter key is pressed */
+todosUl.addEventListener('focus', handlers.handleTodoEdits);
+todosUl.addEventListener('click', handlers.handleTodoEdits);
+
+
+form.addEventListener('submit', view.handleToggleAllStateIssue);

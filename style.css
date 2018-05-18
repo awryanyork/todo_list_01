@@ -1,15 +1,22 @@
-* {box-sizing: border-box;}
+* {
+  box-sizing: border-box;
+  outline: none;
+}
 
 /* colors */
 :root {
+  --white: #FFFFFF;
+  --lightGrey: #E5E5E5;
+  --mediumGrey: #5E5E5E;
+  --darkGrey: #3B3B3B;
   --blue: #2D9CDB;
-  --grey: #E5E5E5;
+  --red: #D44744;
 }
 
 
 body {
   padding: 5%;
-  background: var(--grey);
+  background: var(--lightGrey);
 
   font-family: sans-serif;
 }
@@ -18,25 +25,132 @@ body {
   min-width: 600px;
   max-width: 600px;
   min-height: 700px;
-  max-height: 1000px;
+  max-height: 700px;
   border-radius: 5px;
   margin: auto;
   background: white;
-  padding: 3rem;
+  padding: 3rem 5rem;
   display: grid;
   grid-template-rows: max-content max-content 1fr max-content;
+  grid-gap: 2rem;
 }
 
+
+/* COMPONENTS */
+  /* checkboxes */
+input[type='checkbox'] {
+  cursor: pointer;
+  all: unset;
+}
+
+input::before {
+  content: '';
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  border-radius: 100%;
+  border: 2px solid var(--blue);
+}
+
+input[type='checkbox']:checked:before{
+  content: '';
+  background: url(images/check.svg);
+  width: 2rem;
+  height: 2rem;
+  display: inline-block;
+  border-radius: 100%;
+  font-size: 2rem;
+}
+
+  /* buttons */
+.buttonsWrap button {
+  padding: .2rem .5rem;
+  font-size: 1rem;
+  background: var(--white);
+  border-radius: 5px;
+  color: var(--mediumGrey);
+  cursor: pointer;
+  border: 1px solid var(--mediumGrey);
+}
+
+.displayButtonsWrap button:hover {
+  border: 1px solid var(--blue);
+  background: var(--blue);
+  color: var(--white);
+}
+.displayButtonsWrap .hiding {
+  border: 1px solid var(--blue);
+  background: var(--blue);
+  color: var(--white);
+}
+
+.deleteCompletedButton:hover {
+  background: var(--red);
+  border: 1px solid var(--red);
+  color: var(--white);
+
+}
+
+.deleteCompletedButton:active {
+  background: var(--red);
+  border: 1px solid var(--red);
+  color: var(--white);
+}
+
+  /* todos */
+input[type='text'],
+.editable {
+  padding-bottom: .5rem;
+}
+
+.editable {
+  color: var(--darkGrey);
+}
+
+  /* todo items */
+ul {
+  display: grid;
+  grid-auto-rows: max-content;
+  grid-gap: 1rem;
+  align-items: flex-start;
+  overflow-y: scroll;
+}
+
+.todoWrap {
+  display: grid;
+  grid-template-columns: max-content 1fr max-content;
+  align-items: center;
+  grid-gap: 2.5rem;
+  font-size: 1.75rem;
+}
+
+.todoWrap:hover .todoDeleteButton{
+  display: inline-block;
+}
+
+.todoDeleteButton {
+  background: url(images/close_icon.svg);
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  display: none;
+  cursor: pointer;
+  margin-right: 1rem;
+}
+
+/* GENERAL STYLING */
 h2 {
   font-size: 3rem;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: .5rem;
+  color: var(--darkGrey);
 }
 
 .inputSectionWrap {
   display: grid;
   grid-template-columns: max-content 1fr;
   align-items: center;
+  grid-gap: 1.5rem;
 }
 .toggleAllButton {
   width: fit-content;
@@ -44,32 +158,39 @@ h2 {
 
 .todoInput {
   width: 100%;
-  font-size: 2rem;
+  font-size: 1.75rem;
+  border: none;
+  border-bottom: 1px solid var(--darkGrey);
 }
 
 .todoItem {
   list-style: none;
 }
 
+.buttonsWrap {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  align-items: center;
+}
+
 .displayButtonsWrap {
   display: grid;
-  grid-template-columns: repeat(4, max-content);
-  align-items: center;
+  grid-template-columns: repeat(3, max-content);
+  grid-gap: 1rem;
+}
+
+.deleteCompletedWrap {
+  display: grid;
+}
+
+.deleteCompletedButton {
+  justify-self: end;
 }
 
 .true {
   text-decoration-line: line-through;
 }
 
-.todoDeleteButton {
-  background: url(images/close_icon.svg);
-  width: 2rem;
-  height: 2rem;
-}
-
 /* state styling */
-.hiding {
-  background: red;
-}
 
 .hide { display: none; }
