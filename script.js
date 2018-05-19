@@ -14,12 +14,14 @@ const handlers = {
     todoInput.focus();
   },
   addTodo: function (todoText) {
+    const maxId = todos.length > 0 ? Math.max(...todos.map(todo => todo.id)) : 0;
     todos.push({
+      id: maxId + 1,
       todoText,
       completed: false,
     });
   },
-  displayTodos: (e) => {
+  displayTodos: () => {
     todosUl.innerHTML = '';
 
     todos.forEach((todo, position) => {
@@ -28,6 +30,7 @@ const handlers = {
       const completionState = String(todo.completed);
       todoWrap.classList.add(completionState);
       todoWrap.classList.add('todoWrap');
+      todoWrap.setAttribute('data-id', todo.id);
       todoWrap.id = position;
       // checkbox
       const todoCheckbox = document.createElement('input');
@@ -84,10 +87,9 @@ const view = {
     const itemToDelete = e.target.parentNode;
 
     if (isDeleteButton && itemToDelete) { itemToDelete.remove(); }
-  },
+  }, // end of 'deleteTodo' method
   toggleAll: function () {
-    // check if every todo's completed value is false
-    let allTodosAreIncomplete = todos.every(todo => !todo.completed);
+    const allTodosAreIncomplete = todos.every(todo => !todo.completed);
     if (allTodosAreIncomplete) {
       // then mark all todo's as completed
       todos.forEach(todo => {
@@ -115,7 +117,7 @@ const view = {
     match the completed status of the todo item */
     const clickedACheckbox = e.target.type === 'checkbox';
     if (clickedACheckbox) {
-      let isMarkedCompleted = e.target.checked === true;
+      const isMarkedCompleted = e.target.checked === true;
       if (isMarkedCompleted) {
         e.target.parentNode.classList.add('true');
         e.target.parentNode.classList.remove('false');
@@ -160,7 +162,7 @@ const view = {
     displayActiveButton.classList.add('hiding');
     // adds class of 'hide' to the .todoWrap divs if their completed state is true
     todosUl.childNodes.forEach(todo => {
-      let todoIsComplete = todo.classList.contains('true');
+      const todoIsComplete = todo.classList.contains('true');
       if (todoIsComplete) {
         todo.classList.add('hide');
       } else {
@@ -184,28 +186,15 @@ const view = {
     });
   }, // end of 'displayCompletedOnly' method
   deleteCompleted: function () {
-    todosUl.childNodes.forEach(todo => {
+    Array.from(todosUl.childNodes).forEach((todo, i) => {
       if (todo.classList.contains('true')) {
+        const todoIndex = todos.findIndex(item =>
+          item.id === Number(todo.getAttribute('data-id')));
+        todos.splice(todoIndex, 1);
         todo.remove();
       }
     });
   }, // end of 'deleteCompleted' method
-  handleToggleAllStateIssue: function () {
-    const todosArray = Array.from(todosUl.childNodes);
-    // cut off last todo because it will always be incomplete
-    const currentTodos = todosArray.splice(0, todosArray.length -1);
-    // check if all todos before you submitted new one are complete
-    const allTodosComplete = currentTodos.every(todo => {
-      todo.classList.contains('true');
-    });
-    console.log(allTodosComplete);
-    if (allTodosComplete) {
-      toggleAllButton.checked = false;
-      todosUl.childNodes.forEach(todo => {
-        todo.firstChild.checked = true;
-      });
-    }
-  }
 }; // end of 'view' object
 
 // displays all the todos in the 'todos' array on the page
@@ -239,6 +228,3 @@ deleteCompletedButton.addEventListener('click', view.deleteCompleted);
 on the todoInput when the enter key is pressed */
 todosUl.addEventListener('focus', handlers.handleTodoEdits);
 todosUl.addEventListener('click', handlers.handleTodoEdits);
-
-
-form.addEventListener('submit', view.handleToggleAllStateIssue);

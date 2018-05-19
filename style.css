@@ -43,7 +43,7 @@ input[type='checkbox'] {
   all: unset;
 }
 
-input::before {
+ul input::before {
   content: '';
   width: 2rem;
   height: 2rem;
@@ -52,7 +52,7 @@ input::before {
   border: 2px solid var(--blue);
 }
 
-input[type='checkbox']:checked:before{
+ul input[type='checkbox']:checked::before{
   content: '';
   background: url(images/check.svg);
   width: 2rem;
@@ -152,8 +152,27 @@ h2 {
   align-items: center;
   grid-gap: 1.5rem;
 }
-.toggleAllButton {
-  width: fit-content;
+
+.toggleAllButton::before {
+  content: '';
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--mediumGrey);
+  border-radius: 100%;
+  display: inline-block;
+  background: url(images/arrow_down.svg);
+  background-repeat: no-repeat;
+}
+
+.toggleAllButton:checked::before {
+  content: '';
+  width: 2rem;
+  height: 2rem;
+  border: 2px solid var(--blue);
+  border-radius: 100%;
+  display: inline-block;
+  background: url(images/check.svg);
+  background-repeat: no-repeat;
 }
 
 .todoInput {
