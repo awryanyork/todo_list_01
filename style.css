@@ -70,30 +70,37 @@ ul input[type='checkbox']:checked::before{
   border-radius: 5px;
   color: var(--mediumGrey);
   cursor: pointer;
-  border: 1px solid var(--mediumGrey);
+}
+
+.displayButtonsWrap button {
+  border: 2px solid var(--blue);
 }
 
 .displayButtonsWrap button:hover {
-  border: 1px solid var(--blue);
+  border: 2px solid var(--blue);
   background: var(--blue);
   color: var(--white);
 }
 .displayButtonsWrap .hiding {
-  border: 1px solid var(--blue);
+  border: 2px solid var(--blue);
   background: var(--blue);
   color: var(--white);
 }
 
+.deleteCompletedButton {
+  border: 2px solid var(--red);
+}
+
 .deleteCompletedButton:hover {
   background: var(--red);
-  border: 1px solid var(--red);
+  border: 2px solid var(--red);
   color: var(--white);
 
 }
 
 .deleteCompletedButton:active {
   background: var(--red);
-  border: 1px solid var(--red);
+  border: 2px solid var(--red);
   color: var(--white);
 }
 
@@ -153,6 +160,7 @@ h2 {
   grid-gap: 1.5rem;
 }
 
+/* toggleAllButton */
 .toggleAllButton::before {
   content: '';
   width: 2rem;

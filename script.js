@@ -194,7 +194,11 @@ const view = {
         todo.remove();
       }
     });
+    view.changeToggleAllCheckedStatus();
   }, // end of 'deleteCompleted' method
+  changeToggleAllCheckedStatus: function () {
+    toggleAllButton.checked = !toggleAllButton;
+  }
 }; // end of 'view' object
 
 // displays all the todos in the 'todos' array on the page
