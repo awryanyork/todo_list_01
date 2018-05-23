@@ -8,7 +8,6 @@ const form = document.querySelector('form');
 const todosUl = document.querySelector('ul');
 const todos = [];
 
-
 const handlers = {
   focusOnInput: function () {
     todoInput.focus();
