@@ -79,6 +79,8 @@ const view = {
     e.preventDefault();
     handlers.addTodo(todoInput.value);
     handlers.displayTodos();
+    view.handleCheckboxCheckedStatus();
+    toggleAllButton.checked = false;
     // clear out the 'todoInput' value
     form.reset();
   },
@@ -110,6 +112,8 @@ const view = {
     if (displayCompletedButton.classList.contains('hiding')) {
       view.displayCompletedOnly();
     }
+
+    handlers.focusOnInput();
   }, // end of 'toggleAll' method
   handleChecboxClick: function (e) {
     /* checks if the thing you're clicking is
